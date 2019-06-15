@@ -76,10 +76,11 @@ class ParkingDashboard extends React.Component {
     var allJson = this.state.allJson;
     for (var key in allJson) {
       var vacancies = allJson[key].vacancies || allJson[key].vacant_stalls
-      if(vacancies > 50) {
+      if(vacancies > 25) {
         this.setState({
           closest: allJson[key].name
-        })
+        });
+        break;
       }
       
     };

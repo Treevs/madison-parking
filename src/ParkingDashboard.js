@@ -54,11 +54,11 @@ class ParkingDashboard extends React.Component {
       console.log(error);
     });
 
-    var madisonData = axios.get('https://www.cityofmadison.com/parking-utility/data/ramp-availability.json', { 
-      // crossdomain: true,
-      // headers: { 
-      //   "Content-Type": "application/x-www-form-urlencoded"
-      // }
+    var madisonData = axios.get('localhost:4000/cityparking', { 
+      crossdomain: true,
+      headers: { 
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
     })
     .then( (response) => {
       // handle success

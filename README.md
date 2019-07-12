@@ -2,7 +2,7 @@
 
 This is a React app to find the closest available parking (more than 10 spots open) to the Kohl Center. 
 
-It is hosted at parking.treevs.com
+It is hosted at http://parking.treevs.com
 
 ## Future
 In the future it will be beneficial to make it more robust and be able to show the closest parking to a given address.

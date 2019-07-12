@@ -6,25 +6,25 @@ class ParkingDashboard extends React.Component {
     super(props)
     this.state = {
       closest: "Calculating...",
-      // allJson: {"":""},
+      allJson: {0:""},
       jsonArr: [],
     }
     this.mergeJson = this.mergeJson.bind(this)
 
   }
 
-  mergeJson(smallObj) {
+  mergeJson(smallObj, numKey=false) {
     var bigObj = this.state.allJson;
     var newJsonArr = [];
+    var padding = "";
+    if(numKey) {
+      padding = " ";
+    }
     for (var key in smallObj) {
-      // console.log(smallObj[key])
-      // console.log(bigObj[key])
-      Object.assign(bigObj[key], smallObj[key])
+      Object.assign(bigObj[key+padding], smallObj[key])
       
     };
     for (var key in bigObj) {
-      // console.log(smallObj[key])
-      // console.log(bigObj[key])
       newJsonArr.push(bigObj[key])
       
     };
@@ -46,16 +46,16 @@ class ParkingDashboard extends React.Component {
       // handle success
       // var uwJson = response.data['Central Campus'] + response.data['East Campus'] + response.data['West Campus'] + response.data['South Campus'];
       var uwJson = Object.assign(response.data['Central Campus'], response.data['East Campus'], response.data['West Campus'], response.data['South Campus']);
-      // console.log(uwJson);
       this.mergeJson(uwJson);
     })
     .catch(function (error) {
       // handle error
-      console.log(error);
     });
 
-    var madisonData = axios.get('localhost:4000/cityparking', { 
-      crossdomain: true,
+    var proxyURL = "https://cors-anywhere.herokuapp.com/";
+    // var madisonData = axios.get('localhost:4000/cityparking', { 
+    var madisonData = axios.get(proxyURL + 'https://www.cityofmadison.com/parking-utility/data/ramp-availability.json', { 
+      // crossdomain: true,
       headers: { 
         "Content-Type": "application/x-www-form-urlencoded"
       }
@@ -63,15 +63,22 @@ class ParkingDashboard extends React.Component {
     .then( (response) => {
       // handle success
       var madisonJson = response.data;
-      // console.log(madisonData);
-      this.mergeJson(madisonJson);
+      this.mergeJson(response.data,true);
 
     })
     .catch(function (error) {
       // handle error
-      console.log(error);
     })
+    // fetch('https://www.cityofmadison.com/parking-utility/data/ramp-availability.json', {
+    //   mode: 'no-cors'
+    // })
+    //   // .then(function(response) {
+    //   //   return response.json();
+    //   // })
+    //   .then(function(myJson) {
+    //   })
   }
+
   findClosest() {
     var allJson = this.state.allJson;
     for (var key in allJson) {
@@ -111,7 +118,6 @@ class ParkingDashboard extends React.Component {
       allJson: sortedJson
     })
 
-    console.log (sortedJson)
   }
  
   render() {
@@ -119,7 +125,6 @@ class ParkingDashboard extends React.Component {
         <div>
             <h1>Closest available parking to the Kohl Center is: <span className="closest">{this.state.closest}</span></h1>
             {this.state.jsonArr.map((garage, i) => {     
-                console.log("Entered");                 
                 // Return the element. Also pass key     
                 return (
                   <div>
